@@ -7,22 +7,25 @@ public class Lesson4HA {
         Scanner scanner = new Scanner(System.in);
         System.out.println("Задайте размер массива");
         int arrayNum = scanner.nextInt();
-        firstArray(arrayNum);
+        firstArray(createArray(arrayNum));
         secondArray(arrayNum);
-        findMaxMinValueIndex(arrayNum);
-        zeroElements(arrayNum);
-        sortArray(arrayNum);
-        System.out.println(isUpstreamTrend(arrayNum));
+        findMaxMinValueIndex(createArray(arrayNum));
+        zeroElements(createArray(arrayNum));
+        sortArray(createArray(arrayNum));
+        System.out.println(isUpstreamTrend(createArray(arrayNum)));
         createArray();
 
     }
-    public static void firstArray(int arrayNum) {
+
+    public static int[] createArray(int num){
         Random random = new Random();
-        int[] arr = new int[arrayNum];
+        int[] arr = new int[num];
         for (int i = 0; i < arr.length; i++) {
             arr[i] = random.nextInt(0, 100);
         }
-
+        return arr;
+    }
+    public static void firstArray(int [] arr) {
         System.out.println(Arrays.toString(arr));
         for (int i = 0; i <= arr.length - 1; i++) {
             System.out.print(arr[arr.length - 1 - i] + " ");
@@ -38,44 +41,33 @@ public class Lesson4HA {
         System.out.println("Максимальное число в массиве: " + secondArray[secondArray.length - 1]);
     }
 
-        public static void findMaxMinValueIndex( int arrayNum){
-            Random random = new Random();
-            int[] thirdArray = new int[arrayNum];
-            for (int i = 0; i < thirdArray.length ; i++) {
-                thirdArray[i] = random.nextInt(0, 100);
-            }
-            System.out.println(Arrays.toString(thirdArray));
+        public static void findMaxMinValueIndex(int [] arr){
+            System.out.println(Arrays.toString(arr));
             int index = 0;
             int maxValue = 0;
-            for (int i = 0; i < thirdArray.length; i++) {
-                if (thirdArray[i] >= maxValue) {
+            for (int i = 0; i < arr.length; i++) {
+                if (arr[i] >= maxValue) {
                     index = i;
-                    maxValue = thirdArray[i];
+                    maxValue = arr[i];
                 }
             }
             System.out.println("Индекс максимального элемента массива: " + index);
 
             int index1 = 0;
             int minValue = 100;
-            for (int i = 0; i < thirdArray.length; i++) {
-                if (thirdArray[i] <= minValue) {
+            for (int i = 0; i < arr.length; i++) {
+                if (arr[i] <= minValue) {
                     index1 = i;
-                    minValue = thirdArray[i];
+                    minValue = arr[i];
                 }
             }
             System.out.println("Индекс минимального элемента массива: " + index1);
         }
 
-        public static void zeroElements(int arrayNum){
-            Random random = new Random();
-            int[] thirdArray = new int[arrayNum];
-
-            for (int i = 0; i < thirdArray.length; i++) {
-                thirdArray[i] = random.nextInt(0,100);
-            }
-            System.out.println(Arrays.toString(thirdArray));
+        public static void zeroElements(int [] arr){
+            System.out.println(Arrays.toString(arr));
             int countZero = 0;
-            for (int element:thirdArray) {
+            for (int element:arr) {
 
                 if (element == 0){
                     countZero +=1;
@@ -87,13 +79,7 @@ public class Lesson4HA {
             System.out.println("В массиве " + countZero + " раз встречается элемент со значением 0.");}
         }
 
-        public static void sortArray(int arrayNum){
-            Random random = new Random();
-            int[] arr = new int[arrayNum];
-
-            for (int i = 0; i < arr.length; i++) {
-                arr[i] = random.nextInt(100);
-            }
+        public static void sortArray(int [] arr){
             System.out.println(Arrays.toString(arr));
             for (int i = 0; i <arr.length/2; i++) {
                 int temp;
@@ -104,13 +90,7 @@ public class Lesson4HA {
             System.out.println(Arrays.toString(arr));
         }
 
-        public static boolean isUpstreamTrend(int arrayNum){
-            Random random = new Random();
-            int[] arr = new int[arrayNum];
-            for (int i = 0; i < arr.length; i++) {
-                arr[i] = random.nextInt(100);
-            }
-
+        public static boolean isUpstreamTrend(int [] arr){
             for (int i = 0; i < arr.length-1; i++) {
                 if (arr[i]>arr[i+1]){
                     return false;
