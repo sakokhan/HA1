@@ -44,7 +44,7 @@ public class Lesson4HA {
             for (int i = 0; i < thirdArray.length ; i++) {
                 thirdArray[i] = random.nextInt(0, 100);
             }
-
+            System.out.println(Arrays.toString(thirdArray));
             int index = 0;
             int maxValue = 0;
             for (int i = 0; i < thirdArray.length; i++) {
@@ -58,7 +58,7 @@ public class Lesson4HA {
             int index1 = 0;
             int minValue = 100;
             for (int i = 0; i < thirdArray.length; i++) {
-                if (thirdArray[i] <= maxValue) {
+                if (thirdArray[i] <= minValue) {
                     index1 = i;
                     minValue = thirdArray[i];
                 }
@@ -71,13 +71,13 @@ public class Lesson4HA {
             int[] thirdArray = new int[arrayNum];
 
             for (int i = 0; i < thirdArray.length; i++) {
-                thirdArray[i] = random.nextInt(100);
+                thirdArray[i] = random.nextInt(0,100);
             }
             System.out.println(Arrays.toString(thirdArray));
             int countZero = 0;
-            for (int i = 0; i < thirdArray.length; i++) {
+            for (int element:thirdArray) {
 
-                if (thirdArray[i] == 0){
+                if (element == 0){
                     countZero +=1;
                 }
             }
@@ -122,8 +122,8 @@ public class Lesson4HA {
         public static void createArray(){
             int [] arr = {9,9,9,9};
             String number ="";
-            for (int i = 0; i < arr.length; i++) {
-                String temp = String.valueOf(arr[i]);
+            for (int element:arr) {
+                String temp = String.valueOf(element);
                 number = number + temp;
             }
             int num = Integer.parseInt(number);
