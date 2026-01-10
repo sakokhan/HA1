@@ -6,6 +6,7 @@ public class Main {
         int a = 4*(b+c-1)/2;
         System.out.println(a);
 
+
         //задача 2
         int n = 35;
         int x = (n/10);
