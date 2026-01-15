@@ -10,7 +10,6 @@ public enum BanknotesNominal {
     BanknotesNominal(String title) {
         this.title = title;
     }
-
     public String getTitle() {
         return title;
     }

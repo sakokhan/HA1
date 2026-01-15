@@ -13,7 +13,6 @@ public class CreditCard {
         this.accountNumber = accountNumber;
         this.balance = 0;
     }
-
     public String getAccountNumber() {
         return accountNumber;
     }

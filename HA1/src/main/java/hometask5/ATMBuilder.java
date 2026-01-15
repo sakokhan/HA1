@@ -14,23 +14,19 @@ public class ATMBuilder {
         return numberOfBanknotes20;
     }
 
-    public void setNumberOfBanknotes20(int numberOfBanknotes20) {
-        this.numberOfBanknotes20 = numberOfBanknotes20;
-    }
-
     public int getNumberOfBanknotes50() {
         return numberOfBanknotes50;
     }
-
-    public void setNumberOfBanknotes50(int numberOfBanknotes50) {
-        this.numberOfBanknotes50 = numberOfBanknotes50;
-    }
-
     public int getNumberOfBanknotes100() {
         return numberOfBanknotes100;
     }
-    public void setNumberOfBanknotes100(int numberOfBanknotes100) {
-        this.numberOfBanknotes100 = numberOfBanknotes100;
+
+    public void setNumberOfBanknotesByNominal(int nominal, int notesNumber) {
+        switch (nominal){
+            case 100 -> {this.numberOfBanknotes100 = notesNumber;}
+            case 50 -> {this.numberOfBanknotes50 = notesNumber;}
+            case 20 -> {this.numberOfBanknotes20 = notesNumber;}
+        }
     }
     public int getNumberOfBanknotesByNominal(int nominal) {
         int NumberOfBanknotes = 0;
@@ -41,70 +37,78 @@ public class ATMBuilder {
         }
         return NumberOfBanknotes;
     }
-    public void setNumberOfBanknotesByNominal(int nominal) {
-        switch (nominal) {
-            case 100 -> {setNumberOfBanknotes100(nominal);}
-            case 50 -> {setNumberOfBanknotes50(nominal);}
-            case 20 -> {setNumberOfBanknotes20(nominal);}
-        }
-    }
     public int amountOfMoneyInAtm() {
         int amount = getNumberOfBanknotes100() * 100 + getNumberOfBanknotes50() * 50 + getNumberOfBanknotes20() * 20;
         return amount;
     }
-
     public void addBanknotes(int nominal, int additionalOfBanknotes) {
         switch (nominal) {
-            case 20 -> {
-                numberOfBanknotes20 = getNumberOfBanknotes20() + additionalOfBanknotes;
-            }
-            case 50 -> {
-                numberOfBanknotes50 = getNumberOfBanknotes50() + additionalOfBanknotes;
-            }
-            case 100 -> {
-                numberOfBanknotes100 = getNumberOfBanknotes100() + additionalOfBanknotes;
+            case 20 -> {numberOfBanknotes20 = getNumberOfBanknotes20() + additionalOfBanknotes;}
+            case 50 -> {numberOfBanknotes50 = getNumberOfBanknotes50() + additionalOfBanknotes;}
+            case 100 -> {numberOfBanknotes100 = getNumberOfBanknotes100() + additionalOfBanknotes;}
+        }
+    }
+//метод для составления массива чисел, соответствующих существующим номиналам банкнот
+    public int [] nominals(){
+        BanknotesNominal [] nominals = BanknotesNominal.values();
+        int [] allNominals = new int[nominals.length];
+        for (int i = 0; i < nominals.length; i++) {
+            allNominals[i] = Integer.parseInt(nominals[i].getTitle());
+        }
+        return allNominals;
+    }
+
+    //метод для получения количества банкнот в разрезе по номиналам
+    public int [] notesNumber(int [] notes){
+        int [] notesNumber = new int[notes.length];
+        for (int i = 0; i < notes.length; i++) {
+            notesNumber[i] = getNumberOfBanknotesByNominal(notes[i]);
+        }
+        return notesNumber;
+    }
+//вывод на экран отчета о количестве выданных купюр в разрезе по номиналам
+    public void displayResult(int[] countBanknotes, int []allNominals){
+        for (int i = 0; i < countBanknotes.length; i++) {
+            if(countBanknotes[i]!=0){
+                System.out.println("Выдано " + countBanknotes[i] + " купюр номиналом " + allNominals[i] + " рублей.");
             }
         }
     }
 
-    public boolean isSuccessfulOperation(int sum) {
+    public boolean withdrawCash(int []allNominals, int sum) {
+        int[] countBanknotes = new int[allNominals.length];
+        int[] notesNumber = notesNumber(allNominals);
+        if (sum <= amountOfMoneyInAtm()){
+            int countNotes = 0;
+            for (int i = 0; i < allNominals.length; i++) {
+                if (allNominals[i] <= sum){
 
-        if (amountOfMoneyInAtm() < sum) {
-            System.out.println("Недостаточно средств. Уменьшите запрашиваемую сумму.");
-            return false;
-        } else if (sum >= 20 && sum % 10 == 0 && sum!=30){
-            BanknotesNominal[] nominals = BanknotesNominal.values();
-            int[] countBanknotes = new int[nominals.length];
-            int nom = 0;
-            for (int i = 0; i < countBanknotes.length; i++) {
-                if(sum==60 || sum==80){
-                    nom = Integer.parseInt(nominals[countBanknotes.length-1].getTitle());
-                    countBanknotes[countBanknotes.length-1] = Math.min(sum / nom, getNumberOfBanknotesByNominal(nom));
-                    sum = sum - (countBanknotes[countBanknotes.length-1] * nom);
-                    break;
-                }else {
-                    nom = Integer.parseInt(nominals[i].getTitle());
-                    countBanknotes[i] = Math.min(sum / nom, getNumberOfBanknotesByNominal(nom));
-                    sum = sum - (countBanknotes[i] * nom);
+                    while (sum>=allNominals[allNominals.length-1]){
+                        countNotes = sum/allNominals[i];
+                        countBanknotes[i] = Math.min(countNotes, notesNumber[i]);
+                        sum = sum - (countBanknotes[i] * allNominals[i]);
+                        setNumberOfBanknotesByNominal(allNominals[i], notesNumber[i]-countBanknotes[i]);
+                        i++;
+                    }
+                    if(sum>0){
+                        sum = sum + (allNominals[allNominals.length-1-1]*countBanknotes[allNominals.length-1-1])+(allNominals[allNominals.length-1]*countBanknotes[allNominals.length-1]);
+                        countBanknotes[allNominals.length-1-1] = 0;
+                        countNotes = sum/allNominals[allNominals.length-1];
+                        countBanknotes[allNominals.length-1] = Math.min(countNotes, notesNumber[allNominals.length-1]);
+                        sum = sum - (countBanknotes[allNominals.length-1] * allNominals[allNominals.length-1]);
+                        setNumberOfBanknotesByNominal(allNominals[allNominals.length-1], notesNumber[allNominals.length-1]-countBanknotes[allNominals.length-1]);
+                    }
+
                 }
             }
-            if(sum>0){System.out.println("Банкомат выдает купюры номиналом: 100, 50 или 20 руб. Отсутствуют купюры требуемого номинала. Скорректируйте запрашиваемую сумму.");
+            if(sum>0) {
+                System.out.println("Банкомат не может выдать запрашиваемую сумму.");
                 return false;
             }else {
-                for (int i = 0; i < countBanknotes.length; i++) {
-                    if (countBanknotes[i] > 0) {
-                        System.out.println("Выдано " + countBanknotes[i] + " купюр номиналом " + Integer.parseInt(nominals[i].getTitle()) + " рублей.");
-                    }
-                    switch (nominals[i]) {
-                        case HUNDRED -> {setNumberOfBanknotes100(getNumberOfBanknotes100() - countBanknotes[i]);}
-                        case FIFTY -> {setNumberOfBanknotes50(getNumberOfBanknotes50() - countBanknotes[i]);}
-                        case TWENTY -> {setNumberOfBanknotes20(getNumberOfBanknotes20() - countBanknotes[i]);}
-                    }
-                }
+                displayResult(countBanknotes, allNominals);
             }
-
         } else{
-            System.out.println("Банкомат выдает купюры номиналом: 100, 50 или 20 руб. Скорректируйте запрашиваемую сумму.");
+            System.out.println("Банкомат не может выдать запрашиваемую сумму.");
             return false;
         }
         return true;
